@@ -1,9 +1,11 @@
 import { Router } from "express";
-import passport from "passport";
+import authControllers from "../controllers/auth.controller";
+import { auth } from "../middlewares/auth";
 
 const router = Router();
 
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-router.get("/google/callback", passport.authenticate("google"));
+router.get("/google", authControllers.googleLogin);
+router.get("/google/callback", authControllers.googleLoginCallback);
+router.post("/logout", auth, authControllers.logout);
 
 export default router;

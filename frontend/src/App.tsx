@@ -1,12 +1,21 @@
-const App = () => {
-    const handleLogin = () => {
-        window.location.href = "http://localhost:8000/api/v1/auth/google";
-    };
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import ProtectedRoutes from "./routes/ProtectedRoutes";
 
+const App = () => {
     return (
-        <div>
-            <button onClick={handleLogin}>Login with google</button>
-        </div>
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <ProtectedRoutes>
+                        <Home />
+                    </ProtectedRoutes>
+                }
+            />
+            <Route path="/login" element={<Login />} />
+        </Routes>
     );
 };
 

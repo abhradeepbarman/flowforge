@@ -1,10 +1,10 @@
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
-const users = pgTable("user", {
+const users = pgTable("users", {
     id: uuid("id").primaryKey().unique().notNull().defaultRandom(),
     name: varchar("name").notNull(),
     email: varchar("email").notNull().unique(),
-    password: varchar("password"),
+    refreshToken: varchar("refresh_token"),
 });
 
 export default users;
