@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import Flows from "./pages/Flows";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
+import FlowEditor from "./pages/FlowEditor";
 
 const App = () => {
     return (
@@ -10,10 +11,18 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route
-                path="/dashboard"
+                path="/flows"
                 element={
                     <ProtectedRoutes>
-                        <Dashboard />
+                        <Flows />
+                    </ProtectedRoutes>
+                }
+            />
+            <Route
+                path="/flows/editor/:flowId"
+                element={
+                    <ProtectedRoutes>
+                        <FlowEditor />
                     </ProtectedRoutes>
                 }
             />

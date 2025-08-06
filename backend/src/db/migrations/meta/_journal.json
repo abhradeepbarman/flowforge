@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754332059381,
-      "tag": "0000_striped_the_fury",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754332205125,
-      "tag": "0001_yellow_runaways",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1754425298876,
-      "tag": "0002_easy_stardust",
+      "when": 1754507039164,
+      "tag": "0000_flowery_starhawk",
       "breakpoints": true
     }
   ]

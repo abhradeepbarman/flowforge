@@ -7,5 +7,6 @@ const router = Router();
 router.get("/google", authControllers.googleLogin);
 router.get("/google/callback", authControllers.googleLoginCallback);
 router.post("/logout", auth, authControllers.logout);
+router.post("/refresh", authControllers.refreshAccessToken);
 
 export default router;

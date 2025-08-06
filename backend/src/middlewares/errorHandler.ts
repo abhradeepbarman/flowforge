@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, Response } from "express";
-import { JsonWebTokenError } from "jsonwebtoken";
+import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import { ZodError } from "zod";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
 import { formatError } from "../utils/formatError";
@@ -16,6 +16,13 @@ const errorHandler: ErrorRequestHandler = (
     };
 
     if (err instanceof JsonWebTokenError) {
+        statusCode = 401;
+        errData = {
+            message: "Unauthorized",
+        };
+    }
+
+    if (err instanceof TokenExpiredError) {
         statusCode = 401;
         errData = {
             message: "Unauthorized",

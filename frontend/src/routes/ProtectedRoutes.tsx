@@ -18,8 +18,13 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
                     access_token: searchParams.get("token")!,
                 })
             );
+
+            // remove token & userId from url
+            searchParams.delete("token");
+            searchParams.delete("userId");
+            window.history.replaceState({}, "", location.pathname);
         }
-    }, [searchParams, dispatch]);
+    }, [searchParams, dispatch, location.pathname]);
 
     if (!access_token) {
         return <Navigate to="/login" state={{ from: location }} replace />;

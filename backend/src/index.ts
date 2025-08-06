@@ -1,8 +1,8 @@
 import cors from "cors";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import config from "./config";
 import errorHandler from "./middlewares/errorHandler";
-import { authRoutes } from "./routes";
+import { authRoutes, workflowRoutes } from "./routes";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 
@@ -27,9 +27,12 @@ app.use(
 
 /** Routes */
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/workflow", workflowRoutes);
 
 /** Error Handler */
-app.use(errorHandler);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) =>
+    errorHandler(err, req, res, next)
+);
 
 app.listen(config.PORT, () => {
     console.log(`Server is running on http://localhost:${config.PORT}`);

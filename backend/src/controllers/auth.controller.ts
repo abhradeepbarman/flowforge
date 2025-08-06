@@ -94,7 +94,7 @@ const authControllers = {
                         httpOnly: true,
                         sameSite: "strict",
                         secure: false,
-                        maxAge: 5 * 60 * 1000,
+                        maxAge: 60 * 60 * 1000,
                     })
                     .cookie("refresh_token", refreshToken, {
                         httpOnly: true,
@@ -103,7 +103,7 @@ const authControllers = {
                         maxAge: 7 * 24 * 60 * 60 * 1000,
                     })
                     .redirect(
-                        `${config.FRONTEND_URL}/dashboard?token=${accessToken}&userId=${existingUser.id}`
+                        `${config.FRONTEND_URL}/flows?token=${accessToken}&userId=${existingUser.id}`
                     );
             }
         } catch (error) {
@@ -133,7 +133,7 @@ const authControllers = {
 
     generateTokens: (userId: string) => {
         const accessToken = jwt.sign({ id: userId }, config.JWT_SECRET, {
-            expiresIn: "5m",
+            expiresIn: "1h",
         });
         const refreshToken = jwt.sign({ id: userId }, config.JWT_SECRET, {
             expiresIn: "7d",
@@ -168,23 +168,15 @@ const authControllers = {
                 return next(CustomErrorHandler.unAuthorized("Invalid token"));
             }
 
-            const accessToken = jwt.sign({ id: user.id }, config.JWT_SECRET, {
-                expiresIn: "5m",
-            });
-            const newRefreshToken = jwt.sign(
-                { id: user.id },
-                config.JWT_SECRET,
-                {
-                    expiresIn: "7d",
-                }
-            );
+            const { accessToken, refreshToken: newRefreshToken } =
+                authControllers.generateTokens(user.id);
 
             return res
                 .cookie("access_token", accessToken, {
                     httpOnly: true,
                     sameSite: "strict",
                     secure: false,
-                    maxAge: 5 * 60 * 1000,
+                    maxAge: 60 * 60 * 1000,
                 })
                 .cookie("refresh_token", newRefreshToken, {
                     httpOnly: true,
@@ -192,7 +184,7 @@ const authControllers = {
                     secure: false,
                     maxAge: 7 * 24 * 60 * 60 * 1000,
                 })
-                .json({ accessToken });
+                .json({ access_token: accessToken, id: userDetails.id });
         } catch (error) {
             return next(error);
         }
