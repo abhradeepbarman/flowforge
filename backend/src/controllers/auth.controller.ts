@@ -44,14 +44,13 @@ const authControllers = {
                 const { tokens } = await googleOAuthClient.getToken(
                     qry.code as string
                 );
-                console.log("tokens", tokens);
 
                 // get user email
                 const user = await googleOAuthClient.verifyIdToken({
                     idToken: tokens.id_token as string,
                     audience: config.GOOGLE_CLIENT_ID,
                 });
-                console.log("user", user);
+
                 if (!user) {
                     return next(CustomErrorHandler.wrongCredentials());
                 }
@@ -65,7 +64,7 @@ const authControllers = {
                 let existingUser = await db.query.users.findFirst({
                     where: eq(users.email, userEmail),
                 });
-                console.log("existing user", existingUser);
+
                 if (!existingUser) {
                     // create new user
                     existingUser = (
@@ -77,11 +76,11 @@ const authControllers = {
                             })
                             .returning()
                     )[0];
-                    console.log(existingUser);
                 }
 
                 const { accessToken, refreshToken } =
                     authControllers.generateTokens(existingUser.id);
+
                 // save refresh token
                 await db
                     .update(users)
@@ -95,7 +94,7 @@ const authControllers = {
                         httpOnly: true,
                         sameSite: "strict",
                         secure: false,
-                        maxAge: 60 * 60 * 1000,
+                        maxAge: 5 * 60 * 1000,
                     })
                     .cookie("refresh_token", refreshToken, {
                         httpOnly: true,
@@ -103,7 +102,9 @@ const authControllers = {
                         secure: false,
                         maxAge: 7 * 24 * 60 * 60 * 1000,
                     })
-                    .redirect(`${config.FRONTEND_URL}?token=${accessToken}`);
+                    .redirect(
+                        `${config.FRONTEND_URL}/dashboard?token=${accessToken}&userId=${existingUser.id}`
+                    );
             }
         } catch (error) {
             return next(error);
@@ -132,12 +133,69 @@ const authControllers = {
 
     generateTokens: (userId: string) => {
         const accessToken = jwt.sign({ id: userId }, config.JWT_SECRET, {
-            expiresIn: "1h",
+            expiresIn: "5m",
         });
         const refreshToken = jwt.sign({ id: userId }, config.JWT_SECRET, {
             expiresIn: "7d",
         });
         return { accessToken, refreshToken };
+    },
+
+    refreshAccessToken: async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) => {
+        try {
+            const refreshToken = req.cookies.refresh_token as string;
+
+            if (!refreshToken) {
+                return next(CustomErrorHandler.unAuthorized("Invalid token"));
+            }
+
+            const user = jwt.verify(refreshToken, config.JWT_SECRET) as {
+                id: string;
+            };
+            if (!user) {
+                return next(CustomErrorHandler.unAuthorized("Invalid token"));
+            }
+
+            const userDetails = await db.query.users.findFirst({
+                where: eq(users.id, user.id),
+            });
+
+            if (!userDetails) {
+                return next(CustomErrorHandler.unAuthorized("Invalid token"));
+            }
+
+            const accessToken = jwt.sign({ id: user.id }, config.JWT_SECRET, {
+                expiresIn: "5m",
+            });
+            const newRefreshToken = jwt.sign(
+                { id: user.id },
+                config.JWT_SECRET,
+                {
+                    expiresIn: "7d",
+                }
+            );
+
+            return res
+                .cookie("access_token", accessToken, {
+                    httpOnly: true,
+                    sameSite: "strict",
+                    secure: false,
+                    maxAge: 5 * 60 * 1000,
+                })
+                .cookie("refresh_token", newRefreshToken, {
+                    httpOnly: true,
+                    sameSite: "strict",
+                    secure: false,
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .json({ accessToken });
+        } catch (error) {
+            return next(error);
+        }
     },
 };
 
