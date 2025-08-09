@@ -2,7 +2,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import config from "./config";
 import errorHandler from "./middlewares/errorHandler";
-import { authRoutes, workflowRoutes } from "./routes";
+import { appRoutes, authRoutes, workflowRoutes } from "./routes";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 
@@ -28,6 +28,7 @@ app.use(
 /** Routes */
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/workflow", workflowRoutes);
+app.use("/api/v1/app", appRoutes);
 
 /** Error Handler */
 app.use((err: Error, req: Request, res: Response, next: NextFunction) =>

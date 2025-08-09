@@ -1,6 +1,7 @@
-import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
-import users from "./users";
 import { relations } from "drizzle-orm";
+import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import steps from "./steps";
+import users from "./users";
 
 const workflows = pgTable("workflows", {
     id: uuid("id").primaryKey().unique().notNull().defaultRandom(),
@@ -13,11 +14,12 @@ const workflows = pgTable("workflows", {
         .notNull(),
 });
 
-export const workflowRelations = relations(workflows, ({ one }) => ({
+export const workflowRelations = relations(workflows, ({ one, many }) => ({
     user: one(users, {
         fields: [workflows.userId],
         references: [users.id],
     }),
+    steps: many(steps),
 }));
 
 export default workflows;
