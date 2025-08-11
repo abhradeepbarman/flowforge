@@ -55,6 +55,6 @@ export const apiSlice = createApi({
     baseQuery: baseQueryWithRefresh,
     refetchOnFocus: true,
     refetchOnReconnect: true,
-    tagTypes: [],
+    tagTypes: ["apps"],
     endpoints: () => ({}),
 });

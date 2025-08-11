@@ -16,7 +16,7 @@ const schema = {
     userRelations,
     workflowRelations,
     stepRelations,
-    stepConditionRelations
+    stepConditionRelations,
 };
 
 const client = postgres(config.DB_URL);

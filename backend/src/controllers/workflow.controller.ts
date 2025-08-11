@@ -1,9 +1,9 @@
+import { and, eq } from "drizzle-orm";
 import { NextFunction, Request, Response } from "express";
 import { db } from "../db";
 import { workflows } from "../db/schema";
-import ResponseHandler from "../utils/ResponseHandler";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
-import { eq } from "drizzle-orm";
+import ResponseHandler from "../utils/ResponseHandler";
 
 const workflowController = {
     async createWorkflow(req: Request, res: Response, next: NextFunction) {
@@ -30,9 +30,33 @@ const workflowController = {
         }
     },
 
+    async getWorkFlow(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { flowId } = req.params;
+            const { id } = req.user;
+
+            const workflow = await db.query.workflows.findFirst({
+                where: and(eq(workflows.id, flowId), eq(workflows.userId, id)),
+                with: {
+                    steps: true,
+                },
+            });
+
+            if (!workflow) {
+                return next(CustomErrorHandler.notFound("Workflow not found"));
+            }
+
+            return res
+                .status(200)
+                .send(ResponseHandler(200, "Workflow found", workflow));
+        } catch (error) {
+            return next(error);
+        }
+    },
+
     async updateWorkflow(req: Request, res: Response, next: NextFunction) {
         try {
-            const { id } = req.params;
+            const { flowId } = req.params;
             const body = req.body;
 
             if (!body?.name) {
@@ -44,36 +68,13 @@ const workflowController = {
                 .set({
                     name: body?.name,
                 })
-                .where(eq(workflows.id, id))
+                .where(eq(workflows.id, flowId))
                 .returning();
 
             return res.status(200).send(
                 ResponseHandler(200, "Workflow updated", {
                     id: updatedWorkflow[0].id,
                     name: updatedWorkflow[0].name,
-                })
-            );
-        } catch (error) {
-            return next(error);
-        }
-    },
-
-    async getWorkFlow(req: Request, res: Response, next: NextFunction) {
-        try {
-            const { id } = req.params;
-
-            const workflow = await db.query.workflows.findFirst({
-                where: eq(workflows.id, id),
-            });
-
-            if (!workflow) {
-                return next(CustomErrorHandler.notFound("Workflow not found"));
-            }
-
-            return res.status(200).send(
-                ResponseHandler(200, "Workflow found", {
-                    id: workflow.id,
-                    name: workflow.name,
                 })
             );
         } catch (error) {

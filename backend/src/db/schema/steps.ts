@@ -9,6 +9,7 @@ const steps = pgTable("steps", {
         onDelete: "cascade",
         onUpdate: "no action",
     }),
+    name: varchar("name").notNull(),
     index: integer("index").notNull().default(0),
     type: varchar("type", {
         enum: [stepType.ACTION, stepType.TRIGGER],

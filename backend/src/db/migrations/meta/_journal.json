@@ -8,6 +8,20 @@
       "when": 1754507039164,
       "tag": "0000_flowery_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1754761971443,
+      "tag": "0001_goofy_pyro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1754937456325,
+      "tag": "0002_mighty_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }

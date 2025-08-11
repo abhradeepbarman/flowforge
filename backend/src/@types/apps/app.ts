@@ -9,10 +9,12 @@ export interface Trigger {
     key: string;
     name: string;
     description: string;
-    executionIntervals: {
+    executionInterval: {
         name: string;
         value: number;
-    }[];
+    };
+    login: Function;
+    callback: Function;
 }
 
 export interface Action {

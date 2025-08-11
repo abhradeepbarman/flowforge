@@ -5,8 +5,8 @@ import workflowController from "../controllers/workflow.controller";
 const router = Router();
 
 router.post("/", auth, workflowController.createWorkflow);
-router.post("/:id", auth, workflowController.updateWorkflow);
-router.get("/:id", auth, workflowController.getWorkFlow);
+router.get("/:flowId", auth, workflowController.getWorkFlow);
+router.post("/:flowId", auth, workflowController.updateWorkflow);
 router.get("/", auth, workflowController.getAllWorkflow);
 
 export default router;

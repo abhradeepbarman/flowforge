@@ -6,3 +6,17 @@ export interface CreateFlowApiResponse extends CommonResponse {
         name: string;
     };
 }
+
+export interface GetFlowApiResponse extends CommonResponse {
+    data: {
+        id: string;
+        name: string;
+    };
+}
+
+export interface UpdateFlowApiResponse extends CommonResponse {
+    data: {
+        id: string;
+        name: string;
+    };
+}
