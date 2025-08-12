@@ -8,7 +8,7 @@ import ResponseHandler from "../utils/ResponseHandler";
 const errorHandler: ErrorRequestHandler = (
     err: Error,
     _,
-    res: Response
+    res: Response,
 ): void => {
     let statusCode = 500;
     let errData = {

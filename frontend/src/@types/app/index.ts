@@ -1,4 +1,4 @@
-import type { CommonResponse, Trigger } from "../common";
+import type { Action, CommonResponse, Trigger } from "../common";
 
 export interface GetAllAppsApiResponse extends CommonResponse {
     data: {
@@ -8,5 +8,5 @@ export interface GetAllAppsApiResponse extends CommonResponse {
 }
 
 export interface GetAppTriggersApiResponse extends CommonResponse {
-    data: Trigger[];
+    data: Trigger[] | Action[];
 }

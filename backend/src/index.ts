@@ -12,9 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(
     cors({
-        origin: config.FRONTEND_URL,
+        origin: [config.FRONTEND_URL, config.GOOGLE_URL],
         credentials: true,
-    })
+    }),
 );
 app.use(cookieParser());
 app.use(
@@ -22,7 +22,7 @@ app.use(
         secret: config.SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
-    })
+    }),
 );
 
 /** Routes */
@@ -32,7 +32,7 @@ app.use("/api/v1/app", appRoutes);
 
 /** Error Handler */
 app.use((err: Error, req: Request, res: Response, next: NextFunction) =>
-    errorHandler(err, req, res, next)
+    errorHandler(err, req, res, next),
 );
 
 app.listen(config.PORT, () => {

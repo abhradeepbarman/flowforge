@@ -8,6 +8,7 @@ const _config = {
     GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || "",
     FRONTEND_URL: process.env.FRONTEND_URL || "",
     BACKEND_URL: process.env.BACKEND_URL || "",
+    GOOGLE_URL: process.env.GOOGLE_URL || "",
     JWT_SECRET: process.env.JWT_SECRET || "",
     SESSION_SECRET: process.env.SESSION_SECRET || "",
 };

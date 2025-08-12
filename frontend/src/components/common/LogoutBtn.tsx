@@ -10,9 +10,10 @@ const LogoutBtn = () => {
     const handleLogout = async () => {
         try {
             await logout().unwrap();
-            dispatch(deleteCredentials());
         } catch (error) {
             console.error("Error logging out:", error);
+        } finally {
+            dispatch(deleteCredentials());
         }
     };
 

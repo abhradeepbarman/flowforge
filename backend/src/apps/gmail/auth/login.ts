@@ -9,7 +9,7 @@ export const login = (
     res: Response,
     next: NextFunction,
 ) => {
-    const scopes = ["https://mail.google.com/"];
+    const scopes = ["https://www.googleapis.com/auth/gmail.readonly"];
 
     try {
         const state = crypto.randomBytes(32).toString("hex");
@@ -18,7 +18,7 @@ export const login = (
         const googleOAuthClient = new google.auth.OAuth2(
             config.GOOGLE_CLIENT_ID,
             config.GOOGLE_CLIENT_SECRET,
-            `${config.BACKEND_URL}/${appKey}/login`,
+            `${config.BACKEND_URL}/api/v1/app/callback?app=${appKey}`,
         );
 
         const authorizationUrl = googleOAuthClient.generateAuthUrl({
@@ -27,6 +27,8 @@ export const login = (
             include_granted_scopes: true,
             state: state,
         });
+
+        console.log("authorizationUrl", authorizationUrl);
 
         return res.redirect(authorizationUrl);
     } catch (error) {

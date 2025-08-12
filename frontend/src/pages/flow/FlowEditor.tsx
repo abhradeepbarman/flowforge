@@ -1,24 +1,16 @@
-import Step from "@/components/FlowEditor/Step";
+import CreateTrigger from "@/components/FlowEditor/CreateTrigger";
 import { useGetFlowQuery } from "@/features/workflows/api/getFlowApiSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const FlowEditor = () => {
     const { flowId } = useParams<string>();
-    const [currIndex, setCurrIndex] = useState(0);
+    const [triggerData, setTriggerData] = useState(undefined);
+    const [actionsData, setActionsData] = useState([]);
 
     const { data } = useGetFlowQuery(flowId!, {
         skip: !flowId,
     });
-
-    useEffect(() => {
-        if (data?.data?.steps) {
-            const lastIndex = data.data.steps.length - 1;
-            setCurrIndex(lastIndex + 1);
-        } else {
-            setCurrIndex(0);
-        }
-    }, [data]);
 
     console.log("data", data);
 
@@ -27,7 +19,10 @@ const FlowEditor = () => {
             <p className='text-2xl'>{data?.data.name}</p>
 
             <div>
-                <Step />
+                <h2>Trigger</h2>
+                <div>
+                    {!triggerData ? <CreateTrigger flowId={flowId!} /> : <></>}
+                </div>
             </div>
         </div>
     );

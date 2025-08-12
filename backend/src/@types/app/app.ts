@@ -23,10 +23,10 @@ export interface Trigger {
     key: string;
     name: string;
     description: string;
-    executionInterval: {
+    executionIntervals: {
         name: string;
         value: number;
-    };
+    }[];
     run: Function;
 }
 

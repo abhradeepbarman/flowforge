@@ -20,7 +20,7 @@ export const callback = async (
             const googleOAuthClient = new google.auth.OAuth2(
                 config.GOOGLE_CLIENT_ID,
                 config.GOOGLE_CLIENT_SECRET,
-                `${config.BACKEND_URL}/${appKey}/login`,
+                `${config.BACKEND_URL}/api/v1/app/callback?app=${appKey}`,
             );
 
             const user = await googleOAuthClient.getToken(qry.code as string);
