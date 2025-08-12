@@ -35,7 +35,7 @@ const baseQueryWithRefresh: BaseQueryFn<
         const refreshResult = await baseQuery(
             { url: "/api/v1/auth/refresh", method: "POST" },
             api,
-            extraOptions
+            extraOptions,
         );
 
         if (refreshResult.data) {
@@ -55,6 +55,6 @@ export const apiSlice = createApi({
     baseQuery: baseQueryWithRefresh,
     refetchOnFocus: true,
     refetchOnReconnect: true,
-    tagTypes: ["apps"],
+    tagTypes: ["apps", "flows"],
     endpoints: () => ({}),
 });

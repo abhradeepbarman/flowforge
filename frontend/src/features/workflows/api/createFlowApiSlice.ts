@@ -8,6 +8,7 @@ export const createFlowApiSlice = apiSlice.injectEndpoints({
                 url: "/api/v1/workflow",
                 method: "POST",
             }),
+            invalidatesTags: ["flows"],
         }),
     }),
 });

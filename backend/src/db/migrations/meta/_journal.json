@@ -22,6 +22,20 @@
       "when": 1754937456325,
       "tag": "0002_mighty_rawhide_kid",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1754987826982,
+      "tag": "0003_yellow_mongu",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1754989822629,
+      "tag": "0004_large_marauders",
+      "breakpoints": true
     }
   ]
 }

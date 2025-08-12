@@ -5,15 +5,16 @@ import Login from "./pages/auth/Login";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import FlowEditor from "./pages/flow/FlowEditor";
 import Register from "./pages/auth/Register";
+import NotFound from "./pages/not-found";
 
 const App = () => {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
             <Route
-                path="/flows"
+                path='/flows'
                 element={
                     <ProtectedRoutes>
                         <Flows />
@@ -21,13 +22,14 @@ const App = () => {
                 }
             />
             <Route
-                path="/flows/editor/:flowId"
+                path='/flows/editor/:flowId'
                 element={
                     <ProtectedRoutes>
                         <FlowEditor />
                     </ProtectedRoutes>
                 }
             />
+            <Route path='*' element={<NotFound />} />
         </Routes>
     );
 };

@@ -1,5 +1,4 @@
-import { Trigger } from "../../../@types/apps/app";
-import { newEmailCallback, newEmailLogin } from "./auth/newEmailAuth";
+import { Trigger } from "../../../@types/app/app";
 
 export const newEmailTrigger: Trigger = {
     key: "NEW_EMAIL",
@@ -9,6 +8,7 @@ export const newEmailTrigger: Trigger = {
         name: "Every 5 minutes",
         value: 5 * 60 * 1000,
     },
-    login: newEmailLogin,
-    callback: newEmailCallback,
+    run: () => {
+        // TODO:
+    },
 };

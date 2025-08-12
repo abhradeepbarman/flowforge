@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { apps } from "../@apps";
+import { apps } from "../apps";
 import ResponseHandler from "../utils/ResponseHandler";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
 
@@ -34,29 +34,9 @@ export const appController = {
         return res.send(ResponseHandler(200, "Apps found", allApps));
     },
 
-    async getAppTriggers(req: Request, res: Response, next: NextFunction) {
-        const { app } = req.params;
-
-        // check if app exists
-        const appExists = apps.find((a) => a.key === app);
-        if (!appExists) {
-            return next(CustomErrorHandler.notFound("App not found"));
-        }
-
-        // check if app has triggers
-        if (!appExists.triggers) {
-            return next(CustomErrorHandler.notFound("App has no triggers"));
-        }
-
-        // return triggers
-        return res
-            .status(200)
-            .send(ResponseHandler(200, "Triggers found", appExists.triggers));
-    },
-
     async appLogin(req: Request, res: Response, next: NextFunction) {
         try {
-            const { app, trigger } = req.params;
+            const { app } = req.params;
 
             // check if app exists
             const appExists = apps.find((a) => a.key === app);
@@ -64,21 +44,11 @@ export const appController = {
                 return next(CustomErrorHandler.notFound("App not found"));
             }
 
-            const triggerDetails = appExists.triggers?.find(
-                (t) => t.key === trigger
-            );
-
-            if (!triggerDetails) {
-                return next(CustomErrorHandler.notFound("Trigger not found"));
+            if (!appExists.login) {
+                return next(CustomErrorHandler.notFound("App has no login"));
             }
 
-            if (!triggerDetails.login) {
-                return next(
-                    CustomErrorHandler.notFound("Trigger has no login")
-                );
-            }
-
-            return triggerDetails.login(req, res, next);
+            return appExists.login(app, req, res, next);
         } catch (error) {
             return next(error);
         }
@@ -86,7 +56,7 @@ export const appController = {
 
     async appCallback(req: Request, res: Response, next: NextFunction) {
         try {
-            const { app, trigger } = req.params;
+            const { app } = req.params;
 
             // check if app exists
             const appExists = apps.find((a) => a.key === app);
@@ -94,21 +64,11 @@ export const appController = {
                 return next(CustomErrorHandler.notFound("App not found"));
             }
 
-            const triggerDetails = appExists.triggers?.find(
-                (t) => t.key === trigger
-            );
-
-            if (!triggerDetails) {
-                return next(CustomErrorHandler.notFound("Trigger not found"));
+            if (!appExists.callback) {
+                return next(CustomErrorHandler.notFound("App has no callback"));
             }
 
-            if (!triggerDetails.callback) {
-                return next(
-                    CustomErrorHandler.notFound("Trigger has no callback")
-                );
-            }
-
-            return triggerDetails.callback(req, res, next);
+            return appExists.callback(app, req, res, next);
         } catch (error) {
             return next(error);
         }

@@ -1,4 +1,4 @@
-import type { CommonResponse } from "../common";
+import type { CommonResponse, Flow } from "../common";
 
 export interface CreateFlowApiResponse extends CommonResponse {
     data: {
@@ -8,15 +8,9 @@ export interface CreateFlowApiResponse extends CommonResponse {
 }
 
 export interface GetFlowApiResponse extends CommonResponse {
-    data: {
-        id: string;
-        name: string;
-    };
+    data: Flow;
 }
 
-export interface UpdateFlowApiResponse extends CommonResponse {
-    data: {
-        id: string;
-        name: string;
-    };
+export interface GetAllFlowsApiResponse extends CommonResponse {
+    data: Flow[];
 }

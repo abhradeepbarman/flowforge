@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import steps from "./steps";
 
 const stepConditions = pgTable("step_conditions", {
@@ -15,6 +15,8 @@ const stepConditions = pgTable("step_conditions", {
         enum: ["EQUALS", "CONTAINS"],
     }).notNull(),
     value: varchar("value").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const stepConditionRelations = relations(stepConditions, ({ one }) => ({

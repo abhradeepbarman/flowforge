@@ -1,6 +1,20 @@
+import { NextFunction, Request, Response } from "express";
+
 export interface App {
     key: string;
     name: string;
+    login: (
+        appKey: string,
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => void;
+    callback: (
+        appKey: string,
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => void;
     triggers?: Trigger[];
     actions?: Action[];
 }
@@ -13,12 +27,12 @@ export interface Trigger {
         name: string;
         value: number;
     };
-    login: Function;
-    callback: Function;
+    run: Function;
 }
 
 export interface Action {
     key: string;
     name: string;
     description: string;
+    run: Function;
 }

@@ -1,4 +1,4 @@
-import { Trigger } from "../../../@types/apps/app";
+import { Trigger } from "../../../@types/app/app";
 import { newEmailTrigger } from "./newEmail";
 
 const triggers: Trigger[] = [newEmailTrigger];

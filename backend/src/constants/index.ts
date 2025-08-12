@@ -3,7 +3,8 @@ export const stepType = {
     TRIGGER: "TRIGGER",
 };
 
-export const apps = {
-    GMAIL: "GMAIL",
-    GOOGLE_SHEET: "GOOGLE_SHEET",
+export const workflowStatus = {
+    ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
+    INCOMPLETE: "INCOMPLETE",
 };

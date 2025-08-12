@@ -1,7 +1,8 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import steps from "./steps";
 import users from "./users";
+import { workflowStatus } from "@/constants";
 
 const workflows = pgTable("workflows", {
     id: uuid("id").primaryKey().unique().notNull().defaultRandom(),
@@ -12,6 +13,15 @@ const workflows = pgTable("workflows", {
             onUpdate: "no action",
         })
         .notNull(),
+    status: varchar("status", {
+        enum: [
+            workflowStatus.ACTIVE,
+            workflowStatus.INACTIVE,
+            workflowStatus.INCOMPLETE,
+        ],
+    }).notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const workflowRelations = relations(workflows, ({ one, many }) => ({

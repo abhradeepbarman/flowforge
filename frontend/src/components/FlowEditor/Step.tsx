@@ -1,4 +1,6 @@
-import React from "react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
     Sheet,
     SheetClose,
@@ -9,15 +11,12 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "../ui/sheet";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 
 const Step = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant="outline">Open</Button>
+                <Button variant='outline'>Open</Button>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader>
@@ -27,26 +26,26 @@ const Step = () => {
                         you&apos;re done.
                     </SheetDescription>
                 </SheetHeader>
-                <div className="grid flex-1 auto-rows-min gap-6 px-4">
-                    <div className="grid gap-3">
-                        <Label htmlFor="sheet-demo-name">Name</Label>
+                <div className='grid flex-1 auto-rows-min gap-6 px-4'>
+                    <div className='grid gap-3'>
+                        <Label htmlFor='sheet-demo-name'>Name</Label>
                         <Input
-                            id="sheet-demo-name"
-                            defaultValue="Pedro Duarte"
+                            id='sheet-demo-name'
+                            defaultValue='Pedro Duarte'
                         />
                     </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="sheet-demo-username">Username</Label>
+                    <div className='grid gap-3'>
+                        <Label htmlFor='sheet-demo-username'>Username</Label>
                         <Input
-                            id="sheet-demo-username"
-                            defaultValue="@peduarte"
+                            id='sheet-demo-username'
+                            defaultValue='@peduarte'
                         />
                     </div>
                 </div>
                 <SheetFooter>
-                    <Button type="submit">Save changes</Button>
+                    <Button type='submit'>Save changes</Button>
                     <SheetClose asChild>
-                        <Button variant="outline">Close</Button>
+                        <Button variant='outline'>Close</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>

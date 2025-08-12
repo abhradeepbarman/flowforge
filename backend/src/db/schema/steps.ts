@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { integer, jsonb, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+    integer,
+    jsonb,
+    pgTable,
+    timestamp,
+    uuid,
+    varchar,
+} from "drizzle-orm/pg-core";
 import { stepType } from "../../constants";
 import workflows from "./workflows";
 
@@ -18,6 +25,8 @@ const steps = pgTable("steps", {
     action: jsonb("action").notNull(),
     credentials: jsonb("credentials").notNull(),
     executionInterval: varchar("execution_interval").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const stepRelations = relations(steps, ({ one }) => ({

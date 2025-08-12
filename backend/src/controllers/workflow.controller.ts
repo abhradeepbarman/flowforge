@@ -4,6 +4,7 @@ import { db } from "../db";
 import { workflows } from "../db/schema";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
 import ResponseHandler from "../utils/ResponseHandler";
+import { workflowStatus } from "@/constants";
 
 const workflowController = {
     async createWorkflow(req: Request, res: Response, next: NextFunction) {
@@ -14,8 +15,9 @@ const workflowController = {
             const newWorkflow = await db
                 .insert(workflows)
                 .values({
-                    name: body?.name || "New Workflow",
+                    name: body?.name || "Untitled Workflow",
                     userId: id,
+                    status: workflowStatus.INCOMPLETE,
                 })
                 .returning();
 
@@ -23,7 +25,7 @@ const workflowController = {
                 ResponseHandler(201, "Workflow created", {
                     id: newWorkflow[0].id,
                     name: newWorkflow[0].name,
-                })
+                }),
             );
         } catch (error) {
             return next(error);
@@ -75,7 +77,7 @@ const workflowController = {
                 ResponseHandler(200, "Workflow updated", {
                     id: updatedWorkflow[0].id,
                     name: updatedWorkflow[0].name,
-                })
+                }),
             );
         } catch (error) {
             return next(error);

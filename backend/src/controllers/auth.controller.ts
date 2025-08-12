@@ -4,13 +4,25 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import url from "url";
 import config from "../config";
-import { googleOAuthClient, scopes } from "../config/googleOAuthClient";
+import { google } from "googleapis";
 import { db } from "../db";
 import { users } from "../db/schema";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
+import ResponseHandler from "@/utils/ResponseHandler";
+
+export const googleOAuthClient = new google.auth.OAuth2(
+    config.GOOGLE_CLIENT_ID,
+    config.GOOGLE_CLIENT_SECRET,
+    `${config.BACKEND_URL}/${config.GOOGLE_CALLBACK_URL}`,
+);
 
 const authControllers = {
     googleLogin: (req: Request, res: Response, next: NextFunction) => {
+        const scopes = [
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile",
+        ];
+
         try {
             const state = crypto.randomBytes(32).toString("hex");
             (req.session as any).state = state;
@@ -31,7 +43,7 @@ const authControllers = {
     googleLoginCallback: async (
         req: Request,
         res: Response,
-        next: NextFunction
+        next: NextFunction,
     ) => {
         try {
             let qry = url.parse(req.url, true).query;
@@ -42,7 +54,7 @@ const authControllers = {
                 return next("Invalid state parameter");
             } else {
                 const { tokens } = await googleOAuthClient.getToken(
-                    qry.code as string
+                    qry.code as string,
                 );
 
                 // get user email
@@ -103,7 +115,7 @@ const authControllers = {
                         maxAge: 7 * 24 * 60 * 60 * 1000,
                     })
                     .redirect(
-                        `${config.FRONTEND_URL}/flows?token=${accessToken}&userId=${existingUser.id}`
+                        `${config.FRONTEND_URL}/flows?token=${accessToken}&userId=${existingUser.id}`,
                     );
             }
         } catch (error) {
@@ -125,7 +137,7 @@ const authControllers = {
             return res
                 .clearCookie("access_token")
                 .clearCookie("refresh_token")
-                .redirect(`${config.FRONTEND_URL}/login`);
+                .send(ResponseHandler(200, "Logout successful"));
         } catch (error) {
             return next(error);
         }
@@ -144,7 +156,7 @@ const authControllers = {
     refreshAccessToken: async (
         req: Request,
         res: Response,
-        next: NextFunction
+        next: NextFunction,
     ) => {
         try {
             const refreshToken = req.cookies.refresh_token as string;
